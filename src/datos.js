@@ -40,7 +40,7 @@ const ventas = [
         fecha: "2026-09-03",
         cliente: "C04",
         producto: "Origen Sierra 500 g",
-        ciudad: "Medellín",
+        ciudad: "medellín",
         cantidad: 3,
         precio: 45000,
 },
@@ -68,7 +68,7 @@ const ventas = [
     cliente: "C06",
     producto: "Origen Huila 500 g",
     ciudad:"Cali",
-    cantidad: 2
+    cantidad: 0,
 	precio: 42000,
 },
 {

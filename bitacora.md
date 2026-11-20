@@ -1,4 +1,4 @@
-# Primeros pasos para realizar el ejercicio
+//*# Primeros pasos para realizar el ejercicio*//
 
 1. Revisar el enunciado y identificar el objetivo del análisis.
 2. Crear una carpeta para el proyecto y un repositorio en git hub.
@@ -9,3 +9,6 @@
 
 Se evidenció en la tabla que hubo errores ortográficos en los datos.
 
+//*Diccionario de datos*//
+EN el diccionario tenemos un arreglo de informacion que tiene llave y valor 
+alguns datos de la tabla estaban erroneos 
