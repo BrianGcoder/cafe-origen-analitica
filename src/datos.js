@@ -1,3 +1,4 @@
+// Arreglo de objetos: cada objeto representa una venta.
 const ventas = [ 
     {
     id: 1,
@@ -40,7 +41,7 @@ const ventas = [
         fecha: "2026-09-03",
         cliente: "C04",
         producto: "Origen Sierra 500 g",
-        ciudad: "medellín",
+        ciudad: "medellín ",
         cantidad: 3,
         precio: 45000,
 },
@@ -108,4 +109,5 @@ const ventas = [
     precio: 26000,
 },
 ]
+// module.exports: permite usar el arreglo desde otros archivos.
 module.exports= ventas;
