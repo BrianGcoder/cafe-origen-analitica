@@ -13,8 +13,8 @@ function mostrarCiudad(ciudad) {
   const nombres = {
     "medellín": "Medellín",
     "bogotá": "Bogotá",
-    cali: "Cali",
-    pereira: "Pereira",
+    "cali": "Cali",
+    "pereira": "Pereira",
   };
   // Operador ||: usa el nombre original si no está en el diccionario.
   return nombres[clave] || ciudad.trim();

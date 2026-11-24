@@ -102,3 +102,19 @@ Causa: no se revisaba si había ventas válidas antes de dividir.
 Corrección: si no hay ventas válidas, devolver cero.
 
 El reporte muestra el resumen general, las ventas por ciudad, las unidades por producto, los tres productos de mayor valor y el resumen del 2026-09-01 y del 2026-09-07.
+
+* Reto 5: predicción antes de medir
+
+Predicciones si n pasa de 100 a 1.000:
+
+- primeraVenta: no cambia, aproximadamente 1 operación.
+- totalVendido: crece aproximadamente 10 veces.
+- ventaMayor: crece aproximadamente 10 veces.
+- totalPorCiudad: crece aproximadamente 10 veces.
+
+Complejidades esperadas:
+
+- primeraVenta: O(1)
+- totalVendido: O(n)
+- ventaMayor: O(n)
+- totalPorCiudad: O(n)
