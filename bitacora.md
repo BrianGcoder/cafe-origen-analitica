@@ -118,3 +118,50 @@ Complejidades esperadas:
 - totalVendido: O(n)
 - ventaMayor: O(n)
 - totalPorCiudad: O(n)
+
+Reto 5: medición realizada
+
+Predicción antes de medir: al pasar de n a 10n, las funciones lineales debían multiplicar sus operaciones aproximadamente por 10 y primeraVenta debía quedarse constante.
+
+| n | primeraVenta | totalVendido | ventaMayor | totalPorCiudad |
+|---|---|---|---|---|
+| 100 | 1 | 100 | 100 | 100 |
+| 1.000 | 1 | 1.000 | 1.000 | 1.000 |
+| 10.000 | 1 | 10.000 | 10.000 | 10.000 |
+| 100.000 | 1 | 100.000 | 100.000 | 100.000 |
+
+Los resultados coinciden con las predicciones. primeraVenta tiene O(1). totalVendido recorre una vez el arreglo, ventaMayor visita cada venta una vez y totalPorCiudad procesa una venta por iteración, por lo que las tres tienen O(n).
+
+Reto 6: clientes recurrentes
+
+Con un arreglo de 5 ventas, los ciclos exterior e interior hacen 10 iteraciones del interior: 4 + 3 + 2 + 1. Comparan los clientes una vez por par. Con n ventas hacen n(n-1)/2 pares, es decir, O(n²) comparaciones antes de considerar métodos adicionales.
+
+| n | Tiempo medido |
+|---|---|
+| 1.000 | 72.232 ms |
+| 2.000 | 129.023 ms |
+| 4.000 | 577.036 ms |
+| 8.000 | 4.721 s |
+| 16.000 | 14.566 s |
+
+Al duplicar n, el tiempo tiende a multiplicarse por aproximadamente cuatro en los casos de tamaño suficiente. La medición confirma el crecimiento cuadrático.
+
+Estimaciones cuadráticas: usaré el tiempo medido a 16.000 como referencia. Para 100.000, el factor es (100.000/16.000)² = 39.0625; la estimación es 14.566 s × 39.0625 ≈ 569 s. Para 1.000.000, el factor es (1.000.000/16.000)² = 3906.25; la estimación es 14.566 s × 3906.25 ≈ 56.883 s × 1.000 ≈ 15,8 horas. No ejecuté 100.000 porque la estimación supera dos minutos.
+
+La llamada recurrentes.includes recorre el arreglo recurrentes. En el peor caso agrega trabajo adicional de búsqueda dentro de los pares encontrados. Por eso el costo puede incluir recorridos sobre recurrentes además del ciclo exterior e interior.
+
+Conclusión para la gerente: el reporte revisa todas las ventas contra las demás y repite búsquedas entre coincidencias. Cada vez que el historial crece, el trabajo crece mucho más rápido que los datos. Con grandes volúmenes puede esperar varios minutos o quedarse pensando.
+
+Reto 7: recursos
+
+Con 10.000 ventas, totalCiudadCadena y totalCiudadUnaPasada devolvieron exactamente 473.749.000 para Bogotá.
+
+totalCiudadCadena usa cuatro recorridos completos: map normaliza y obtiene valores, filter conserva una ciudad, map extrae valores y reduce suma. Crea arreglos intermedios después de map, filter y map. Tiempo O(n), espacio O(n) por los arreglos temporales.
+
+totalCiudadUnaPasada usa un recorrido con for...of y variables acumuladoras. Tiempo O(n), espacio O(1).
+
+Aunque la cadena recorra el arreglo cuatro veces, O(4n) se simplifica a O(n) porque las constantes no cambian la categoría asintótica.
+
+Reto 8: revisión y informe
+
+Se creó RENDIMIENTO.md con mediciones, proyecciones, riesgos y plan de optimización. La observación de revisión priorizará incluir el criterio de medición: el informe separa operaciones deterministas de tiempos ambientales y deja claro qué datos no se ejecutaron.

@@ -1,4 +1,3 @@
-// Arreglo de objetos: cada objeto representa una venta.
 const ventas = [ 
     {
     id: 1,
@@ -109,5 +108,4 @@ const ventas = [
     precio: 26000,
 },
 ]
-// module.exports: permite usar el arreglo desde otros archivos.
 module.exports= ventas;
