@@ -15,14 +15,10 @@ function mostrarCiudad(ciudad) {
   return nombres[clave] || ciudad.trim();
 }
 
-function contarOperacion(contador) {
-  if (contador) contador.operaciones++;
-}
-
 function totalVendido(ventas, contador) {
   let total = 0;
   for (const venta of ventas) {
-    contarOperacion(contador);
+    if (contador) contador.operaciones++;
     total += valorVenta(venta);
   }
   return total;
@@ -39,7 +35,7 @@ function ventaMayor(ventas, contador) {
 
   let mayor = ventas[0];
   for (const venta of ventas) {
-    contarOperacion(contador);
+    if (contador) contador.operaciones++;
     if (valorVenta(venta) > valorVenta(mayor)) mayor = venta;
   }
   return mayor;
@@ -91,7 +87,7 @@ function ventasPorCiudadM(ventas, ciudad) {
 
 function totalPorCiudad(ventas, contador) {
   return ventas.reduce((totales, venta) => {
-    contarOperacion(contador);
+    if (contador) contador.operaciones++;
     const ciudad = mostrarCiudad(venta.ciudad);
     totales[ciudad] = (totales[ciudad] || 0) + valorVenta(venta);
     return totales;
@@ -133,7 +129,8 @@ function ventasDelDia(ventas, fecha) {
   };
 }
 
-function primeraVenta(ventas) {
+function primeraVenta(ventas, contador) {
+  if (contador) contador.operaciones++;
   return ventas.length === 0 ? null : ventas[0];
 }
 

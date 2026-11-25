@@ -123,8 +123,7 @@ Reto 5: medición realizada
 
 Predicción antes de medir: al pasar de n a 10n, las funciones lineales debían multiplicar sus operaciones aproximadamente por 10 y primeraVenta debía quedarse constante.
 
-| n | primeraVenta | totalVendido | ventaMayor | totalPorCiudad |
-|---|---|---|---|---|
+| n | primeraVenta | totalVendido | ventaMayor | totalPorCiudad 
 | 100 | 1 | 100 | 100 | 100 |
 | 1.000 | 1 | 1.000 | 1.000 | 1.000 |
 | 10.000 | 1 | 10.000 | 10.000 | 10.000 |

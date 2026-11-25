@@ -8,29 +8,21 @@ const productos = [
 
 const ciudades = ["Medellín", "Bogotá", "Cali", "Pereira"];
 
-function enteroAleatorio(maximo) {
-  return Math.floor(Math.random() * maximo);
-}
-
 function generarVentas(n) {
-  if (!Number.isInteger(n) || n < 0) {
-    throw new TypeError("n debe ser un entero mayor o igual que cero");
-  }
-
-  const cantidadClientes = n === 0 ? 0 : Math.max(1, Math.floor(n / 3));
+  const cantidadClientes = Math.floor(n / 3);
   const ventas = [];
 
   for (let i = 0; i < n; i++) {
-    const producto = productos[enteroAleatorio(productos.length)];
-    const numeroCliente = enteroAleatorio(cantidadClientes) + 1;
+    const producto = productos[Math.floor(Math.random() * productos.length)];
+    const numeroCliente = Math.floor(Math.random() * cantidadClientes) + 1;
 
     ventas.push({
       id: i + 1,
       fecha: "2026-09-01",
-      cliente: `C${String(numeroCliente).padStart(2, "0")}`,
+      cliente: `C${numeroCliente}`,
       producto: producto.nombre,
-      ciudad: ciudades[enteroAleatorio(ciudades.length)],
-      cantidad: enteroAleatorio(5) + 1,
+      ciudad: ciudades[Math.floor(Math.random() * ciudades.length)],
+      cantidad: Math.floor(Math.random() * 5) + 1,
       precio: producto.precio,
     });
   }

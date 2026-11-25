@@ -22,7 +22,7 @@ for (const n of tamaños) {
   totalVendido(ventas, contadorTotal);
   ventaMayor(ventas, contadorMayor);
   totalPorCiudad(ventas, contadorCiudades);
-  contarOperacionConstante(ventas, contadorPrimera);
+  primeraVenta(ventas, contadorPrimera);
 
   tablaOperaciones.push({
     n,
@@ -31,11 +31,6 @@ for (const n of tamaños) {
     ventaMayor: contadorMayor.operaciones,
     totalPorCiudad: contadorCiudades.operaciones,
   });
-}
-
-function contarOperacionConstante(ventas, contador) {
-  contador.operaciones++;
-  primeraVenta(ventas);
 }
 
 console.table(tablaOperaciones);
