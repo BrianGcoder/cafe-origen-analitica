@@ -1,4 +1,3 @@
-// require: importa los datos y las funciones que se van a probar.
 const ventas = require("./datos");
 const {
   valorVenta,
@@ -10,20 +9,20 @@ const {
   totalVendidoM,
   unidadesVendidasM,
   ventasPorCiudadM,
+  clientesRecurrentes,
+  totalCiudadCadena,
+  totalCiudadUnaPasada,
 } = require("./analitica");
+const { generarVentas } = require("./generador");
 
 let todasCorrectas = true;
 
-// Función auxiliar: compara el resultado con el esperado usando igualdad estricta.
 function verificar(nombre, resultado, esperado) {
-  // Operador ternario: muestra OK o DIFERENTE.
   const estado = resultado === esperado ? "OK" : "DIFERENTE";
   console.log(`${nombre}: ${estado}`);
-  // Condicional if: marca error si los resultados no coinciden.
   if (estado === "DIFERENTE") todasCorrectas = false;
 }
 
-// Arreglo de objetos: guarda casos completo, unitario y vacío.
 const casos = [
   {
     nombre: "todas las ventas",
@@ -54,64 +53,68 @@ const casos = [
   },
 ];
 
-// Ciclo for...of: prueba cada función con cada caso.
 for (const caso of casos) {
   const nombre = caso.nombre;
   const datos = caso.datos;
   const mayor = ventaMayor(datos);
 
-  // valorVenta: calcula cantidad por precio.
   if (datos.length > 0) {
     verificar(`${nombre} - valorVenta`, valorVenta(datos[0]), 84000);
   }
 
-  // totalVendido: suma el valor de todas las ventas.
   verificar(`${nombre} - totalVendido`, totalVendido(datos), caso.total);
 
-  // unidadesVendidas: suma las unidades vendidas.
   verificar(
     `${nombre} - unidadesVendidas`,
     unidadesVendidas(datos),
     caso.unidades,
   );
 
-  // ventaMayor: devuelve el registro de mayor valor.
   verificar(
     `${nombre} - ventaMayor`,
     mayor === null ? null : mayor.id,
     caso.ventaMayorId,
   );
 
-  // ticketPromedio: calcula el promedio de ventas válidas.
   verificar(`${nombre} - ticketPromedio`, ticketPromedio(datos), caso.ticket);
 
-  // ventasPorCiudad: suma las ventas de la ciudad indicada.
   verificar(
     `${nombre} - ventasPorCiudad`,
     ventasPorCiudad(datos, " Medellín "),
     caso.medellin,
   );
 
-  // totalVendidoM: suma las ventas usando métodos de arreglo.
   verificar(
     `${nombre} - totalVendido ciclo y método`,
     totalVendidoM(datos),
     totalVendido(datos),
   );
 
-  // unidadesVendidasM: suma las unidades usando métodos de arreglo.
   verificar(
     `${nombre} - unidadesVendidas ciclo y método`,
     unidadesVendidasM(datos),
     unidadesVendidas(datos),
   );
 
-  // ventasPorCiudadM: suma la ciudad usando métodos de arreglo.
   verificar(
     `${nombre} - ventasPorCiudad ciclo y método`,
     ventasPorCiudadM(datos, " Medellín "),
     ventasPorCiudad(datos, " Medellín "),
   );
 }
+
+verificar(
+  "clientes recurrentes",
+  JSON.stringify(clientesRecurrentes(ventas)),
+  JSON.stringify(["C01", "C02", "C03"]),
+);
+
+const ventasGeneradas = generarVentas(10000);
+const ciudad = "Bogotá";
+verificar(
+  "total por ciudad con cadena y una pasada",
+  totalCiudadCadena(ventasGeneradas, ciudad),
+  totalCiudadUnaPasada(ventasGeneradas, ciudad),
+);
 
 if (!todasCorrectas) process.exitCode = 1;
