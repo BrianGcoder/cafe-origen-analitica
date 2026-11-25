@@ -133,23 +133,46 @@ function primeraVenta(ventas, contador) {
   if (contador) contador.operaciones++;
   return ventas.length === 0 ? null : ventas[0];
 }
-
+// clientes con set
 function clientesRecurrentes(ventas) {
-  const recurrentes = [];
-
-  for (let i = 0; i < ventas.length; i++) {
-    for (let j = i + 1; j < ventas.length; j++) {
-      if (
-        ventas[i].cliente === ventas[j].cliente &&
-        !recurrentes.includes(ventas[i].cliente)
-      ) {
-        recurrentes.push(ventas[i].cliente);
-      }
-    }
-  }
-
-  return recurrentes;
+  const recurrentes = new Set();
+  const recurrentesconguayaba = new Set();
+  
+for (let value of ventas) {
+  if (recurrentes.has(value.cliente)){
+    recurrentesconguayaba.add(value.cliente)
+  }else {recurrentes.add(value.cliente)}
 }
+return recurrentesconguayaba;
+}
+//compras con map
+function comprasPorCliente (ventas) {
+    const comprasconguayabas = new Map()
+    const clientesRecurrentes = new Set ()
+
+  for (let value of ventas){
+    
+    let cliente = value.cliente;
+    let cantidad = value.cantidad;
+    if(comprasconguayabas.has(cliente)){
+        comprasconguayabas.set(
+            cliente,
+            comprasconguayabas.get (cliente) + cantidad 
+        )
+        clientesRecurrentes.add(cliente) 
+
+    } else {comprasconguayabas.set(cliente, cantidad)}
+
+    
+}
+
+    const guayabas = [...clientesRecurrentes]
+
+    return {comprasconguayabas,
+         guayabas,};
+}
+
+
 
 function totalCiudadCadena(ventas, ciudad) {
   const ciudadBuscada = normalizarCiudad(ciudad);
@@ -195,4 +218,5 @@ module.exports = {
   clientesRecurrentes,
   totalCiudadCadena,
   totalCiudadUnaPasada,
+  comprasPorCliente,
 };

@@ -108,4 +108,5 @@ const ventas = [
     precio: 26000,
 },
 ]
+
 module.exports= ventas;

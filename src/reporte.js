@@ -8,6 +8,7 @@ const {
   unidadesPorProducto,
   topProductosPorValor,
   ventasDelDia,
+  comprasPorCliente,
 } = require("./analitica");
 
 const pesos = (valor) =>
@@ -61,3 +62,6 @@ console.table([ventasDelDia(ventas, "2026-09-01")]);
 console.log("RESUMEN DE UN DÍA SIN VENTAS");
 
 console.table([ventasDelDia(ventas, "2026-09-07")]);
+
+const {comprasconguayabas, guayabas}= comprasPorCliente(ventas) 
+console.log (comprasconguayabas, guayabas)
