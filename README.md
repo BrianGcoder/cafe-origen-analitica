@@ -14,9 +14,11 @@ Desde la carpeta del proyecto, ejecuta:
 node src/explorar.js
 node src/verificar.js
 node src/reporte.js
+node src/medir.js
 ```
 
 `explorar.js` muestra los datos de entrada. `verificar.js` prueba los indicadores y compara las versiones con ciclos y métodos. `reporte.js` imprime los resúmenes para la gerente.
+`medir.js` genera datos, cuenta operaciones y mide el reporte de clientes recurrentes.
 
 ## Preguntas que responde
 
