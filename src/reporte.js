@@ -63,5 +63,6 @@ console.log("RESUMEN DE UN DÍA SIN VENTAS");
 
 console.table([ventasDelDia(ventas, "2026-09-07")]);
 
-const {comprasconguayabas, guayabas}= comprasPorCliente(ventas) 
-console.log (comprasconguayabas, guayabas)
+const { comprasPorCliente: conteoCompras, clientesRecurrentes } =
+  comprasPorCliente(ventas);
+console.log(conteoCompras, clientesRecurrentes);

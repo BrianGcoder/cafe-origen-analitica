@@ -133,43 +133,68 @@ function primeraVenta(ventas, contador) {
   if (contador) contador.operaciones++;
   return ventas.length === 0 ? null : ventas[0];
 }
-// clientes con set
-function clientesRecurrentes(ventas) {
+// Referencia cuadrática: busca otra compra para cada primera aparición.
+function clientesRecurrentesDobleFor(ventas) {
+  const recurrentes = [];
+
+  for (let i = 0; i < ventas.length; i++) {
+    let esPrimeraCompra = true;
+    let tieneOtraCompra = false;
+
+    for (let j = 0; j < ventas.length; j++) {
+      if (i === j || ventas[i].cliente !== ventas[j].cliente) continue;
+
+      if (j < i) {
+        esPrimeraCompra = false;
+        break;
+      }
+
+      tieneOtraCompra = true;
+      break;
+    }
+
+    if (esPrimeraCompra && tieneOtraCompra) {
+      recurrentes.push(ventas[i].cliente);
+    }
+  }
+
+  return recurrentes;
+}
+
+function clientesRecurrentesSet(ventas) {
+  const vistos = new Set();
   const recurrentes = new Set();
-  const recurrentesconguayaba = new Set();
-  
-for (let value of ventas) {
-  if (recurrentes.has(value.cliente)){
-    recurrentesconguayaba.add(value.cliente)
-  }else {recurrentes.add(value.cliente)}
-}
-return recurrentesconguayaba;
-}
-//compras con map
-function comprasPorCliente (ventas) {
-    const comprasconguayabas = new Map()
-    const clientesRecurrentes = new Set ()
 
-  for (let value of ventas){
-    
-    let cliente = value.cliente;
-    let cantidad = value.cantidad;
-    if(comprasconguayabas.has(cliente)){
-        comprasconguayabas.set(
-            cliente,
-            comprasconguayabas.get (cliente) + cantidad 
-        )
-        clientesRecurrentes.add(cliente) 
+  for (const venta of ventas) {
+    if (vistos.has(venta.cliente)) {
+      recurrentes.add(venta.cliente);
+    } else {
+      vistos.add(venta.cliente);
+    }
+  }
 
-    } else {comprasconguayabas.set(cliente, cantidad)}
-
-    
+  return [...recurrentes];
 }
 
-    const guayabas = [...clientesRecurrentes]
+function clientesRecurrentes(ventas) {
+  return new Set(clientesRecurrentesSet(ventas));
+}
 
-    return {comprasconguayabas,
-         guayabas,};
+function comprasPorCliente(ventas) {
+  const compras = new Map();
+
+  for (const venta of ventas) {
+    const cliente = venta.cliente;
+    const cantidadActual = compras.has(cliente) ? compras.get(cliente) : 0;
+    compras.set(cliente, cantidadActual + 1);
+  }
+
+  const recurrentes = [];
+  for (const cliente of compras.keys()) {
+    if (compras.get(cliente) > 1) recurrentes.push(cliente);
+  }
+
+  return { comprasPorCliente: compras, clientesRecurrentes: recurrentes };
 }
 
 
@@ -216,6 +241,8 @@ module.exports = {
   ventasDelDia,
   primeraVenta,
   clientesRecurrentes,
+  clientesRecurrentesSet,
+  clientesRecurrentesDobleFor,
   totalCiudadCadena,
   totalCiudadUnaPasada,
   comprasPorCliente,
