@@ -1,4 +1,5 @@
 const ventas = require("./datos");
+const catalogo = require("./catalogo");
 const {
   valorVenta,
   totalVendido,
@@ -9,7 +10,9 @@ const {
   totalVendidoM,
   unidadesVendidasM,
   ventasPorCiudadM,
+  comboRegalo,
   clientesRecurrentes,
+  mejorRacha,
   totalCiudadCadena,
   totalCiudadUnaPasada,
 } = require("./analitica");
@@ -108,6 +111,23 @@ verificar(
   JSON.stringify(clientesRecurrentes(ventas)),
   JSON.stringify(["C01", "C02", "C03"]),
 );
+verificar(
+  "clientes recurrentes sin duplicados",
+  JSON.stringify(clientesRecurrentes([{ cliente: "C01" }, { cliente: "C02" }])),
+  JSON.stringify([]),
+);
+verificar(
+  "combo regalo",
+  JSON.stringify(comboRegalo(catalogo, 87000)),
+  JSON.stringify(["Origen Huila 500 g", "Origen Sierra 500 g"]),
+);
+verificar("combo regalo sin resultado", comboRegalo(catalogo, 10000), null);
+verificar(
+  "mejor racha de tres días",
+  mejorRacha([110000, 137000, 187000, 120000, 258000, 173000], 3),
+  565000,
+);
+verificar("mejor racha mayor que los días", mejorRacha([100, 200], 3), null);
 
 const ventasGeneradas = generarVentas(10000);
 const ciudad = "Bogotá";

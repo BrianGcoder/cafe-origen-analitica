@@ -18,27 +18,33 @@
 | topProductosPorValor | Agrupa y ordena productos | O(n log n) | O(p) | Reducir toma O(n); ordenar p totales puede costar O(p log p). Se conserva una copia de productos como arreglo y objetos. |
 | ventasDelDia | Resume un día | O(n) | O(n) | Filtra ventas y crea arreglos intermedios; totalVendido también recorre el filtro. |
 | primeraVenta | Devuelve la primera venta | O(1) | O(1) | Acceso directo al índice cero; 1 operación medida. |
-| clientesRecurrentes | Encuentra clientes que aparecen más de una vez | O(n²), peor caso con O(n³) por includes | O(r), con r clientes recurrentes | Dos ciclos comparan pares, n(n-1)/2 iteraciones; includes puede recorrer recurrentes. |
+| clientesRecurrentes | Encuentra clientes que aparecen más de una vez | O(n) promedio | O(u), con u clientes distintos | Usa dos Set y procesa cada venta una vez. |
+| comboRegalo | Busca dos productos que sumen un monto | O(n) promedio | O(n) | Recorre el catálogo y busca complementos con un Map. |
+| mejorRacha | Busca el mayor total de k días consecutivos | O(n) | O(1) | Calcula la primera ventana y actualiza la suma al entrar y salir cada día. |
 | totalCiudadCadena | Suma una ciudad con cuatro métodos encadenados | O(n) | O(n) | Devuelve el mismo valor que una pasada en 10.000 ventas, pero crea arreglos temporales. |
 | totalCiudadUnaPasada | Suma una ciudad con un recorrido | O(n) | O(1) | Devuelve el mismo valor que la cadena, sin arreglos intermedios. |
 
-## Proyección
+## Medición de clientes recurrentes
 
-La proyección usa el tiempo medido a 16.000 ventas de clientesRecurrentes (14.566 s) y crece como n²:
+Una ejecución de `node src/medir.js` midió estos tiempos:
 
-- 100.000 ventas: aproximadamente 569 s, unos 9,5 minutos.
-- 1.000.000 de ventas: aproximadamente 56.883 s, unas 15,8 horas.
+| Ventas | Tiempo |
+|---:|---:|
+| 1.000 | 1,056 ms |
+| 2.000 | 1,432 ms |
+| 4.000 | 1,985 ms |
+| 8.000 | 4,808 ms |
+| 16.000 | 14,864 ms |
 
-No se ejecutó 100.000 porque supera dos minutos.
+Los tiempos dependen del entorno y de los datos generados al azar. La complejidad promedio se determina por el recorrido único y las búsquedas en Set, no por una sola medición.
 
 ## Riesgos
 
-1. clientesRecurrentes: mayor riesgo por crecimiento cuadrático y búsquedas ocultas con includes.
-2. topProductosPorValor: crecimiento n log n y memoria proporcional a productos distintos.
-3. ventasDelDia y métodos encadenados: crecimiento lineal, pero crean arreglos adicionales.
-4. totalPorCiudad y unidadesPorProducto: crecimiento lineal con memoria proporcional a categorías.
-5. totalVendido, ventaMayor y demás recorridos únicos: crecimiento lineal y memoria constante.
+1. topProductosPorValor: crecimiento O(n log n) y memoria proporcional a productos distintos.
+2. ventasDelDia y métodos encadenados: crecimiento lineal, pero crean arreglos adicionales.
+3. totalPorCiudad y unidadesPorProducto: memoria proporcional a categorías.
+4. comboRegalo: memoria proporcional al tamaño del catálogo.
 
-## Plan de optimización
+## Cambios realizados
 
-Para clientesRecurrentes se repite el recorrido de pares para encontrar coincidencias y luego se vuelve a recorrer recurrentes con includes. Una mejora futura puede usar un Set para recordar qué cliente ya apareció y qué cliente ya fue agregado. Así se evita comparar todos los pares y evita volver a buscar dentro de recurrentes. Primero se debe revisar cada venta una vez, guardar clientes vistos y guardar recurrentes una sola vez.
+`clientesRecurrentes` ahora usa Set y procesa cada venta una vez. `comboRegalo` usa Map para buscar el precio complementario y `mejorRacha` actualiza una ventana deslizante sin crear arreglos intermedios.

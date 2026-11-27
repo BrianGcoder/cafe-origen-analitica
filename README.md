@@ -1,6 +1,6 @@
 # Café Origen: análisis de ventas
 
-Proyecto de práctica que analiza una muestra de 12 ventas de Café Origen. Calcula ventas totales, unidades, ticket promedio, la venta más grande, totales por ciudad y productos destacados.
+Proyecto de práctica que analiza una muestra de 12 ventas de Café Origen. Calcula ventas totales, unidades, ticket promedio, la venta más grande, totales por ciudad, productos destacados, clientes recurrentes, combinaciones de regalo y mejores rachas de ventas.
 
 ## Requisitos
 

@@ -13,9 +13,7 @@ const {
 const pesos = (valor) =>
   `$ ${valor.toLocaleString("es-CO", { maximumFractionDigits: 2 })}`;
 
-console.log("========================================");
 console.log("       REPORTE DE VENTAS - CAFÉ ORIGEN");
-console.log("========================================");
 
 console.log("RESUMEN GENERAL");
 
@@ -46,7 +44,6 @@ console.table(
 );
 
 console.log("TOP 3 PRODUCTOS POR VALOR");
-console.log("----------------------------------------");
 console.table(
   topProductosPorValor(ventas, 3).map(({ producto, valor }) => ({
     producto,

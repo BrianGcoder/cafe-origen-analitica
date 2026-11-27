@@ -131,7 +131,7 @@ Predicción antes de medir: al pasar de n a 10n, las funciones lineales debían 
 
 Los resultados coinciden con las predicciones. primeraVenta tiene O(1). totalVendido recorre una vez el arreglo, ventaMayor visita cada venta una vez y totalPorCiudad procesa una venta por iteración, por lo que las tres tienen O(n).
 
-Reto 6: clientes recurrentes
+Reto 6: clientes recurrentes, medición de la versión inicial
 
 Con un arreglo de 5 ventas, los ciclos exterior e interior hacen 10 iteraciones del interior: 4 + 3 + 2 + 1. Comparan los clientes una vez por par. Con n ventas hacen n(n-1)/2 pares, es decir, O(n²) comparaciones antes de considerar métodos adicionales.
 
@@ -150,6 +150,8 @@ Estimaciones cuadráticas: usaré el tiempo medido a 16.000 como referencia. Par
 La llamada recurrentes.includes recorre el arreglo recurrentes. En el peor caso agrega trabajo adicional de búsqueda dentro de los pares encontrados. Por eso el costo puede incluir recorridos sobre recurrentes además del ciclo exterior e interior.
 
 Conclusión para la gerente: el reporte revisa todas las ventas contra las demás y repite búsquedas entre coincidencias. Cada vez que el historial crece, el trabajo crece mucho más rápido que los datos. Con grandes volúmenes puede esperar varios minutos o quedarse pensando.
+
+Actualización: la implementación final usa Set para procesar cada venta una vez. La complejidad promedio actual es O(n); las mediciones y proyecciones anteriores describen la versión inicial cuadrática, no el código actual.
 
 Reto 7: recursos
 

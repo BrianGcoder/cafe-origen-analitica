@@ -114,6 +114,20 @@ function topProductosPorValor(ventas, k) {
     .slice(0, k);
 }
 
+function comboRegalo(catalogo, monto) {
+  const vistos = new Map();
+
+  for (const producto of catalogo) {
+    const complemento = monto - producto.precio;
+    if (vistos.has(complemento)) {
+      return [vistos.get(complemento), producto.producto];
+    }
+    vistos.set(producto.precio, producto.producto);
+  }
+
+  return null;
+}
+
 function ventasDelDia(ventas, fecha) {
   const ventasDelDia = ventas.filter((venta) => venta.fecha === fecha);
   const ventasValidas = ventasDelDia.filter((venta) => venta.cantidad > 0);
@@ -135,20 +149,30 @@ function primeraVenta(ventas, contador) {
 }
 
 function clientesRecurrentes(ventas) {
-  const recurrentes = [];
+  const vistos = new Set();
+  const recurrentes = new Set();
 
-  for (let i = 0; i < ventas.length; i++) {
-    for (let j = i + 1; j < ventas.length; j++) {
-      if (
-        ventas[i].cliente === ventas[j].cliente &&
-        !recurrentes.includes(ventas[i].cliente)
-      ) {
-        recurrentes.push(ventas[i].cliente);
-      }
-    }
+  for (const venta of ventas) {
+    if (vistos.has(venta.cliente)) recurrentes.add(venta.cliente);
+    else vistos.add(venta.cliente);
   }
 
-  return recurrentes;
+  return [...recurrentes];
+}
+
+function mejorRacha(totalesPorDia, k) {
+  if (k > totalesPorDia.length) return null;
+
+  let suma = 0;
+  for (let i = 0; i < k; i++) suma += totalesPorDia[i];
+
+  let mejor = suma;
+  for (let i = k; i < totalesPorDia.length; i++) {
+    suma += totalesPorDia[i] - totalesPorDia[i - k];
+    if (suma > mejor) mejor = suma;
+  }
+
+  return mejor;
 }
 
 function totalCiudadCadena(ventas, ciudad) {
@@ -190,9 +214,11 @@ module.exports = {
   totalPorCiudad,
   unidadesPorProducto,
   topProductosPorValor,
+  comboRegalo,
   ventasDelDia,
   primeraVenta,
   clientesRecurrentes,
+  mejorRacha,
   totalCiudadCadena,
   totalCiudadUnaPasada,
 };
