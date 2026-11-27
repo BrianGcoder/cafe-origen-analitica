@@ -149,15 +149,64 @@ function primeraVenta(ventas, contador) {
 }
 
 function clientesRecurrentes(ventas) {
+  return clientesRecurrentesSet(ventas);
+}
+
+function clientesRecurrentesDobleFor(ventas) {
+  const recurrentes = [];
+  for (let i = 0; i < ventas.length; i++) {
+    let esPrimeraCompra = true;
+    let tieneOtraCompra = false;
+
+    for (let j = i + 1; j < ventas.length; j++) {
+      if (ventas[i].cliente !== ventas[j].cliente) continue;
+      tieneOtraCompra = true;
+      break;
+    }
+
+    for (let j = 0; j < i; j++) {
+      if (ventas[i].cliente === ventas[j].cliente) {
+        esPrimeraCompra = false;
+        break;
+      }
+    }
+
+    if (esPrimeraCompra && tieneOtraCompra) recurrentes.push(ventas[i].cliente);
+  }
+
+  return recurrentes;
+}
+
+function clientesRecurrentesSet(ventas) {
   const vistos = new Set();
   const recurrentes = new Set();
 
   for (const venta of ventas) {
-    if (vistos.has(venta.cliente)) recurrentes.add(venta.cliente);
-    else vistos.add(venta.cliente);
+    if (vistos.has(venta.cliente)) {
+      recurrentes.add(venta.cliente);
+    } else {
+      vistos.add(venta.cliente);
+    }
   }
 
   return [...recurrentes];
+}
+
+function comprasPorCliente(ventas) {
+  const compras = new Map();
+
+  for (const venta of ventas) {
+    const cliente = venta.cliente;
+    const cantidadActual = compras.has(cliente) ? compras.get(cliente) : 0;
+    compras.set(cliente, cantidadActual + 1);
+  }
+
+  const recurrentes = [];
+  for (const cliente of compras.keys()) {
+    if (compras.get(cliente) > 1) recurrentes.push(cliente);
+  }
+
+  return { comprasPorCliente: compras, clientesRecurrentes: recurrentes };
 }
 
 function mejorRacha(totalesPorDia, k) {
@@ -218,7 +267,10 @@ module.exports = {
   ventasDelDia,
   primeraVenta,
   clientesRecurrentes,
-  mejorRacha,
+  clientesRecurrentesSet,
+  clientesRecurrentesDobleFor,
   totalCiudadCadena,
   totalCiudadUnaPasada,
+  comprasPorCliente,
+  mejorRacha,
 };

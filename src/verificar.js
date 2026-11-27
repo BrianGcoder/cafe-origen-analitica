@@ -13,6 +13,9 @@ const {
   comboRegalo,
   clientesRecurrentes,
   mejorRacha,
+  clientesRecurrentesSet,
+  clientesRecurrentesDobleFor,
+  comprasPorCliente,
   totalCiudadCadena,
   totalCiudadUnaPasada,
 } = require("./analitica");
@@ -24,6 +27,24 @@ function verificar(nombre, resultado, esperado) {
   const estado = resultado === esperado ? "OK" : "DIFERENTE";
   console.log(`${nombre}: ${estado}`);
   if (estado === "DIFERENTE") todasCorrectas = false;
+}
+
+function verificarClientesRecurrentes(nombre, datos) {
+  const fuerzaBruta = clientesRecurrentesDobleFor(datos);
+  const conSet = clientesRecurrentesSet(datos);
+  const conMap = comprasPorCliente(datos).clientesRecurrentes;
+  const normalizar = (clientes) => JSON.stringify([...clientes].sort());
+
+  verificar(
+    `clientes recurrentes (${nombre}): doble for y Set`,
+    normalizar(fuerzaBruta),
+    normalizar(conSet),
+  );
+  verificar(
+    `clientes recurrentes (${nombre}): doble for y Map`,
+    normalizar(fuerzaBruta),
+    normalizar(conMap),
+  );
 }
 
 const casos = [
@@ -106,10 +127,11 @@ for (const caso of casos) {
   );
 }
 
+verificarClientesRecurrentes("Día 1", ventas);
 verificar(
-  "clientes recurrentes",
-  JSON.stringify(clientesRecurrentes(ventas)),
-  JSON.stringify(["C01", "C02", "C03"]),
+  "compras en Map para C01",
+  comprasPorCliente(ventas).comprasPorCliente.get("C01"),
+  3,
 );
 verificar(
   "clientes recurrentes sin duplicados",
@@ -128,6 +150,8 @@ verificar(
   565000,
 );
 verificar("mejor racha mayor que los días", mejorRacha([100, 200], 3), null);
+
+verificarClientesRecurrentes("5.000 ventas generadas", generarVentas(5000));
 
 const ventasGeneradas = generarVentas(10000);
 const ciudad = "Bogotá";

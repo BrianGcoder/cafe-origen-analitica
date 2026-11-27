@@ -1,10 +1,13 @@
+const { performance } = require("node:perf_hooks");
 const { generarVentas } = require("./generador");
 const {
   totalVendido,
   ventaMayor,
   totalPorCiudad,
   primeraVenta,
-  clientesRecurrentes,
+  clientesRecurrentesDobleFor,
+  clientesRecurrentesSet,
+  comprasPorCliente,
   totalCiudadCadena,
   totalCiudadUnaPasada,
 } = require("./analitica");
@@ -45,12 +48,40 @@ console.table([
   { versión: "Iguales", resultado: porCadena === porUnaPasada },
 ]);
 
-const tamañosTiempo = [1000, 2000, 4000, 8000, 16000];
-console.log("Tiempo de clientesRecurrentes:");
+const tamañosClientes = [1000, 10000, 100000];
+const tablaClientes = [];
 
-for (const n of tamañosTiempo) {
-  const ventas = generarVentas(n);
-  console.time(`n=${n}`);
-  clientesRecurrentes(ventas);
-  console.timeEnd(`n=${n}`);
+function medirClientes(etiqueta, ventas, funcion) {
+  console.time(etiqueta);
+  const inicio = performance.now();
+  funcion(ventas);
+  const milisegundos = performance.now() - inicio;
+  console.timeEnd(etiqueta);
+  return Number(milisegundos.toFixed(3));
 }
+
+const tablaFuerzaBruta = [];
+const tiemposFuerzaBruta = new Map();
+for (const n of [1000, 2000, 4000, 10000]) {
+  const ventas = generarVentas(n);
+  const milisegundos = medirClientes(
+    `doble for escala n=${n}`,
+    ventas,
+    clientesRecurrentesDobleFor,
+  );
+  tiemposFuerzaBruta.set(n, milisegundos);
+  tablaFuerzaBruta.push({ ventas: n, "doble for (ms)": milisegundos });
+}
+console.log("Escalado de la versión de fuerza bruta:");
+console.table(tablaFuerzaBruta);
+
+console.log("Tiempo de las tres versiones de clientes recurrentes:");
+for (const n of tamañosClientes) {
+  const ventas = generarVentas(n);
+  const dobleFor = tiemposFuerzaBruta.get(n) ?? "omitida";
+  const set = medirClientes(`Set n=${n}`, ventas, clientesRecurrentesSet);
+  const map = medirClientes(`Map n=${n}`, ventas, comprasPorCliente);
+  tablaClientes.push({ ventas: n, "doble for (ms)": dobleFor, "Set (ms)": set, "Map (ms)": map });
+}
+
+console.table(tablaClientes);

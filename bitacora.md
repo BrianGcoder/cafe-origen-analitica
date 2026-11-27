@@ -166,3 +166,48 @@ Aunque la cadena recorra el arreglo cuatro veces, O(4n) se simplifica a O(n) por
 Reto 8: revisión y informe
 
 Se creó RENDIMIENTO.md con mediciones, proyecciones, riesgos y plan de optimización. La observación de revisión priorizará incluir el criterio de medición: el informe separa operaciones deterministas de tiempos ambientales y deja claro qué datos no se ejecutaron.
+
+Reto 9: optimización de clientes recurrentes (Día 2)
+
+1. Entender
+
+La entrada es un arreglo de ventas; cada venta contiene un identificador de cliente. La salida es la lista de identificadores únicos que aparecen en dos o más ventas. El orden de salida no es importante. La solución optimizada debe procesar 100.000 ventas en menos de un segundo. Las ventas con cantidad cero también cuentan como registros de compra, porque aquí se cuenta la frecuencia de ventas, no las unidades.
+
+2. Ejemplos y casos borde
+
+- Arreglo vacío: [] -> []
+- Un solo registro: [A] -> []
+- Un cliente aparece dos veces: [A, A] -> [A]
+- Un cliente aparece varias veces: [A, B, A, A] -> [A], sin duplicar el identificador.
+- Datos del Día 1: clientes recurrentes C01, C02 y C03.
+- Con 5.000 ventas generadas, las tres implementaciones deben producir los mismos identificadores al ordenar sus resultados.
+
+3. Fuerza bruta
+
+clientesRecurrentesDobleFor compara cada venta con las demás. Solo agrega al cliente en su primera aparición y si encuentra otra venta del mismo cliente. Así evita duplicados sin una estructura de búsqueda adicional. En el peor caso hace O(n²) comparaciones. La memoria auxiliar es O(r), donde r es la cantidad de clientes recurrentes devueltos.
+
+4. Optimizar
+
+clientesRecurrentesSet usa un Set de vistos y otro de recurrentes. Las operaciones has y add tienen costo esperado O(1), de modo que el recorrido cuesta O(n) esperado. comprasPorCliente usa un Map para contar registros por cliente y revisa ese Map para obtener los clientes con más de una compra; también cuesta O(n) esperado.
+
+El intercambio es usar memoria para evitar repetir comparaciones. Set y Map guardan información de hasta u clientes únicos y la salida guarda hasta r recurrentes: espacio O(u + r), que queda acotado por O(n). La fuerza bruta usa menos memoria auxiliar, pero puede hacer muchas más comparaciones.
+
+5. Implementar
+
+Se conservaron tres versiones comparables: clientesRecurrentesDobleFor como referencia, clientesRecurrentesSet con dos Set, y comprasPorCliente con un Map de conteos. La función clientesRecurrentes se mantiene como envoltorio compatible que devuelve el Set de clientes de la versión optimizada. El reporte usa los nombres explícitos del resultado del Map.
+
+6. Probar y medir
+
+node src/verificar.js compara las tres listas ordenadas con las ventas del Día 1 y con 5.000 ventas generadas; ambas comparaciones pasan. También comprueba que C01 tiene tres compras en el Map.
+
+node src/medir.js usa console.time y performance.now. Los datos se generan aleatoriamente, así que los tiempos pueden variar entre ejecuciones y equipos. La fuerza bruta se mide hasta 10.000 ventas; se omite para 100.000 por su crecimiento cuadrático.
+
+| Ventas | Doble for (ms) | Set (ms) | Map (ms) |
+|---:|---:|---:|---:|
+| 1.000 | 3.398 | 0.259 | 0.482 |
+| 2.000 | 6.379 | — | — |
+| 4.000 | 26.944 | — | — |
+| 10.000 | 206.968 | 1.461 | 1.577 |
+| 100.000 | omitida | 12.156 | 17.636 |
+
+Las mediciones muestran que al aumentar de 1.000 a 10.000 ventas, las versiones optimizadas se mantienen cerca de un crecimiento lineal y la fuerza bruta aumenta mucho más rápido. Con 100.000 ventas, Set y Map quedan por debajo de un segundo en esta ejecución. Los tiempos son mediciones del entorno, no garantías para todos los equipos.
